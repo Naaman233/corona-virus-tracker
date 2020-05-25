@@ -5,5 +5,18 @@ body{
     display:flex;
     align-items: center;
     justify-content: center;
-    
+        flex-direction: column
+}
+.cImage{
+    width: 370px;
+    margin-top: 50px;
+}
+
+@media(max-width: 770px) {
+    .container{
+        margin: 0 10%;
+    }
+}
+.cImage{
+    width: 50%;
 }
