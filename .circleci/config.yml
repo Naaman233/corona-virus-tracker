@@ -4,8 +4,4 @@ orbs:
 workflows:
   node-tests:
     jobs:
-      -run: 'npm install'
-      -save_cache:
-        paths:
-          -node_modules
-        key: 'v1-dependencies-{{checksum "package.json"}}'
+      - node/test
