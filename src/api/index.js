@@ -1,8 +1,12 @@
-import axios from 'axios'
+import * as axios from 'axios'
+const COVID19_WORLDWIDE_MANAGEMENT = process.env.COVID19_WORLDWIDE_MANAGEMENT
+const COVID19_STATEWIDE_MANAGEMENT = process.env.COVID19_STATEWIDE_MANAGEMENT
 
 const url = 'https://covid19.mathdro.id/api'
+const api = 'https://disease.sh/v3/covid-19'
+
  export const fetchData  = async (country) =>{
-     let changeableUrl = url
+     let changeableUrl = url;
      if(country){
          changeableUrl = `${url}/countries/${country}`
      }
@@ -33,7 +37,9 @@ export const fetchDailyData = async () =>{
             deaths: dailyData.deaths.total,
             date: dailyData.reportDate,
         }))
+
         return modifiedData
+
     }catch(error){
 
     }
@@ -47,3 +53,60 @@ export const fetchcountries = async() =>{
         console.log(error)
     }
 }
+
+export const fetchStateData = async (state) => {
+    let stateChangeableUrl = api;
+    if(state){
+        stateChangeableUrl = `${api}/states/${state}`
+    }
+    try{
+        const {stateData:{state,updated,cases,todayCases,deaths,todayDeaths,recovered,active,population}} = axios.get(stateChangeableUrl);
+        //destructured data
+        const modifiedStateData = {
+            state,
+            active,
+            cases,
+            todayCases,
+            updated,
+            recovered,
+            deaths,
+            todayDeaths,
+            population
+        }
+        return modifiedStateData;
+
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const fetchDailyStateData = async () => {
+    try{
+        const {stateData} = await axios.get(`${api}/states`);
+        const modifiedStateData = stateData.map((dailyStateData)=>({
+            State: dailyStateData.state,
+            Active: dailyStateData.active,
+            Cases: dailyStateData.state,
+            TodayCases: dailyStateData.todayCases,
+            updated: dailyStateData.updated,
+            recovered: dailyStateData.recovered,
+            Deaths: dailyStateData.deaths,
+            TodayDeaths: dailyStateData.todayCases,
+            Population: dailyStateData.population
+        }))
+        return modifiedStateData;
+        
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const fetchStates = async () => {
+    try{
+        const {data} = await axios.get(`${api}/states`);
+        return data.map(({state})=>state)
+    }catch(error){
+        console.log(error);
+    }
+}
+
