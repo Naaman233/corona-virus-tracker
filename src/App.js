@@ -34,4 +34,13 @@ class App extends React.Component{
         )
     }
 }
+//Testing npm dependencies and child processes. 
+const cp = require("child_process");
+const verify = () => cp.exec("npm ls", error =>{
+    if(error){
+        console.error("Dependency mismatch between package.json and lock. Run: npm install");
+        throw error;
+    }
+    console.log("Dependencies verified =)");
+});
 export default App
